@@ -33,35 +33,23 @@ Health check endpoint
 
 ## Deployment Options
 
-### Option 1: Heroku (Recommended for beginners)
+### Option 1: Render (Recommended)
 
-1. **Install Heroku CLI** and login:
-```bash
-heroku login
-```
+1. **Go to [render.com](https://render.com)** and sign up with GitHub
+2. **Click "New +"** → **"Web Service"**
+3. **Connect your GitHub repository**
+4. **Configure the service**:
+   - **Name**: `agmarknet-api` (or your preferred name)
+   - **Environment**: `Python 3`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn app:app`
+   - **Plan**: Free (or choose paid if needed)
+5. **Click "Create Web Service"**
+6. **Your app will be live** at `https://your-app-name.onrender.com`
 
-2. **Create Heroku app**:
-```bash
-heroku create your-app-name
-```
-
-3. **Add buildpack for Chrome**:
-```bash
-heroku buildpacks:add https://github.com/heroku/heroku-buildpack-google-chrome
-heroku buildpacks:add heroku/python
-```
-
-4. **Deploy**:
-```bash
-git add .
-git commit -m "Initial deployment"
-git push heroku main
-```
-
-5. **Open your app**:
-```bash
-heroku open
-```
+**Alternative: Use render.yaml (Auto-deploy)**
+- Push the `render.yaml` file to your repository
+- Render will automatically detect and deploy using the configuration
 
 ### Option 2: Railway
 
@@ -70,40 +58,23 @@ heroku open
 3. **Add environment variables** if needed
 4. **Your app will be live** at the provided URL
 
-### Option 3: Docker Deployment
+### Option 3: Local Development
 
-1. **Build and run locally**:
-```bash
-docker-compose up --build
-```
-
-2. **Deploy to any cloud platform** that supports Docker:
-   - Google Cloud Run
-   - AWS ECS
-   - Azure Container Instances
-   - DigitalOcean App Platform
-
-### Option 4: VPS/Server Deployment
-
-1. **Clone the repository** on your server
-2. **Install dependencies**:
+1. **Install dependencies**:
 ```bash
 pip install -r requirements.txt
 ```
 
-3. **Install Chrome and ChromeDriver**:
+2. **Install Chrome and ChromeDriver** (for your OS)
+
+3. **Run the app**:
 ```bash
-# Ubuntu/Debian
-sudo apt-get update
-sudo apt-get install -y google-chrome-stable
-wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/LATEST_RELEASE/chromedriver_linux64.zip
-sudo unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
-sudo chmod +x /usr/local/bin/chromedriver
+python app.py
 ```
 
-4. **Run with Gunicorn**:
+4. **Test the API**:
 ```bash
-gunicorn --bind 0.0.0.0:5000 app:app
+curl "http://localhost:5000/request?commodity=Tomato&state=Maharashtra&market=Mumbai"
 ```
 
 ## Flutter Integration
@@ -243,8 +214,8 @@ curl "http://localhost:5000/request?commodity=Tomato&state=Maharashtra&market=Mu
 
 ### Chrome/ChromeDriver Issues
 - Ensure Chrome and ChromeDriver versions match
-- For Docker deployment, the Dockerfile handles this automatically
-- For Heroku, the buildpack handles this automatically
+- For Render deployment, Chrome will be installed automatically
+- For local development, install Chrome and ChromeDriver manually
 
 ### CORS Issues
 - The API has CORS enabled by default
